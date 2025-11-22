@@ -1,0 +1,90 @@
+<% layout('layouts/boilerplate') %>
+
+<body>
+    <div class="row mt-3"> 
+        <div class="col-8 offset-2">
+            <br/><br/>
+            <h3>Edit Your Listing:</h3>
+
+            <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" novalidate class="needs-validation" enctype="multipart/form-data">
+
+                <!-- Title -->
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control" required>
+                    <div class="valid-feedback">Title looks good!</div>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
+                    <div class="invalid-feedback">Please provide a valid description.</div>
+                </div>
+
+                <!-- Original Image -->
+                <div class="mb-3">
+                    Orignal Listing Image:<br/>
+                    <img src="<%= orignalImageUrl %>" alt="Listing Image" style="width:250px; height:auto; border-radius:8px;">
+                </div>
+
+                <!-- New Image Upload -->
+                <div class="mb-3">
+                    <label for="image" class="form-label">New Image</label>
+                    <input 
+                        name="listing[image]" 
+                        type="file" 
+                        class="form-control"
+                    />
+                </div>
+
+                <div class="row">
+                    <!-- Price -->
+                    <div class="mb-3 col-md-4">
+                        <label for="price" class="form-label">Price</label>
+                        <input name="listing[price]" value="<%= listing.price %>" type="number" step="0.01" class="form-control" required>
+                        <div class="invalid-feedback">Please provide a valid price.</div>
+                    </div>
+
+                    <!-- Country -->
+                    <div class="mb-3 col-md-8">
+                        <label for="country" class="form-label">Country</label>
+                        <input name="listing[country]" value="<%= listing.country %>" type="text" class="form-control" required>
+                        <div class="invalid-feedback">Please provide a valid country.</div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input name="listing[location]" value="<%= listing.location %>" type="text" class="form-control" required>
+                    <div class="invalid-feedback">Please provide a valid location.</div>
+                </div>
+
+                <!-- Category -->
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select name="listing[category]" class="form-control" required>
+                        <% const categories = [
+                            "Trending","Rooms","Iconic Cities","Mountains","Castles",
+                            "Amazing Pools","Camping","Farms","Arctic","Domes","Boats"
+                        ]; %>
+
+                        <% categories.forEach(cat => { %>
+                            <option value="<%= cat %>" <%= listing.category === cat ? "selected" : "" %>>
+                                <%= cat %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <button class="btn btn-dark mt-3 edit-btn">Update</button>
+                <br/><br/>
+
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
