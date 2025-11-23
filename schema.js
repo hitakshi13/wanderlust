@@ -7,13 +7,13 @@ const listingSchema = Joi.object({
     description: Joi.string().required(),
     location: Joi.string().required(),
     country: Joi.string().required(),
+    category: Joi.string().required(),   // ✅ Added category here
     image: Joi.object({
       url: Joi.string().allow("", null),
       filename: Joi.string().allow("", null)
-    }).allow(null)  // <-- allow whole object to be null
+    }).allow(null)  // allow whole object to be null
   }).required()
 });
-
 
 const reviewSchema = Joi.object({
   review: Joi.object({

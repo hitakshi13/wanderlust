@@ -2,7 +2,8 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-console.log(process.env.SECRET_KEY);
+console.log("SECRET_KEY =", process.env.SECRET_KEY);
+console.log("ATLASDB_URL =", process.env.ATLASDB_URL);
 
 const express = require("express");
 const app = express();
@@ -15,13 +16,13 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const LocalStrategy = require("passport-local");
 const passport = require("passport");
 const User = require("./models/user.js");
 
-const MONGO_URL = "mongodb://localhost:27017/wanderlust";
+const sessionSecret = process.env.SECRET_KEY || "fallbacksecret";
+const MONGO_URL = process.env.ATLASDB_URL;
 
 // --------------------- CONNECT TO MONGO ---------------------
 main()
@@ -43,18 +44,15 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 
-// --------------------- SESSION ---------------------
-
-
+// --------------------- SESSION (NO STORE) ---------------------
 const sessionOptions = {
-  secret: "thisshouldbeabettersecret!",
+  secret: sessionSecret,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
-    maxAge: 1000 * 60 * 60 * 24 * 7,
     httpOnly: true,
-  },
+    maxAge: 1000 * 60 * 60 * 24 * 7
+  }
 };
 
 app.use(session(sessionOptions));
@@ -80,9 +78,9 @@ app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
 
-// --------------------- 404 HANDLER ---------------------
+// --------------------- 404 ---------------------
 app.use((req, res, next) => {
-  next(new ExpressError(404, "Page Not Found"));
+  next(new ExpressError("Page Not Found", 404));
 });
 
 // --------------------- GLOBAL ERROR HANDLER ---------------------
