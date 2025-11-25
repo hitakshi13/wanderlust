@@ -22,21 +22,26 @@
                     <div class="invalid-feedback">Please provide a valid description.</div>
                 </div>
 
-                <!-- Original Image -->
-                <div class="mb-3">
-                    Orignal Listing Image:<br/>
-                    <img src="<%= orignalImageUrl %>" alt="Listing Image" style="width:250px; height:auto; border-radius:8px;">
-                </div>
+    <!-- Existing Image Preview -->
+<div class="mb-3">
+    <label class="form-label">Current Image</label><br>
+    <img 
+        src="<%= listing.image.url %>" 
+        alt="Listing Image" 
+        style="width:250px; height:auto; border-radius:8px;"
+    >
+</div>
 
-                <!-- New Image Upload -->
-                <div class="mb-3">
-                    <label for="image" class="form-label">New Image</label>
-                    <input 
-                        name="listing[image]" 
-                        type="file" 
-                        class="form-control"
-                    />
-                </div>
+<!-- New Image Upload -->
+<div class="mb-3">
+    <label for="image" class="form-label">New Image</label>
+    <input 
+        name="listing[image]" 
+        type="file" 
+        class="form-control"
+    />
+</div>
+
 
                 <div class="row">
                     <!-- Price -->

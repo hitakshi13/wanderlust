@@ -56,13 +56,21 @@ module.exports.createListing = async (req, res) => {
 };
 
 module.exports.showListing = async (req, res) => {
-  const listing = await Listing.findById(req.params.id);
+  const listing = await Listing.findById(req.params.id)
+    .populate({
+      path: "reviews",
+      populate: { path: "author" }
+    })
+    .populate("owner");
+
   if (!listing) {
     req.flash("error", "Cannot find that listing!");
     return res.redirect("/listings");
   }
+
   res.render("listings/show.ejs", { listing });
 };
+
 
 module.exports.renderEditForm = async (req, res) => {
   const listing = await Listing.findById(req.params.id);
